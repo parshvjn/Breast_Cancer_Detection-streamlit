@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 import joblib
 from warnings import filterwarnings
+from test import *
 filterwarnings('ignore')
 st.set_page_config(layout = 'wide')
 model = joblib.load('logistic_model.pkl', 'r')
@@ -30,9 +31,11 @@ def file_uploader():
         else:
             if upload.name.split('.')[-1] == 'csv':
                 df = pd.read_csv(upload)
-                # if list(df.columns) in placeHolders:
-                for i in df.values:
-                    st.write(i)
+                
+                if list(df.columns) != placeHolders:
+                    df = columnFixer(df, placeHolders)
+                
+                print(model.predict(df.values),  )
                 # else:
                     # st.toast('Please upload the file required')
                 # st.write(df)
@@ -61,3 +64,4 @@ with manual:
         else:
             st.toast('Please fill up all inputs')
 
+# set all values above 3 to 0 of the scaled Data ( make a copy of jupyter, )
